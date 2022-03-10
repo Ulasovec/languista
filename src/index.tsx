@@ -5,12 +5,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {AppProvider} from "./context/AppContext";
+import {QueryProvider} from "./QueryClientProvider/QueryClientProvider";
 
 ReactDOM.render(
     <React.StrictMode>
         <Router>
             <AppProvider>
+                <QueryProvider>
                 <App/>
+                </QueryProvider>
             </AppProvider>
         </Router>
     </React.StrictMode>,

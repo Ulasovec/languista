@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "databases",
+  "info": {
+    "singularName": "database",
+    "pluralName": "databases",
+    "displayName": "database"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "eng": {
+      "type": "string"
+    },
+    "rus": {
+      "type": "string"
+    }
+  }
+}
