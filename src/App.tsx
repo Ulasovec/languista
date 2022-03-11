@@ -3,7 +3,7 @@ import {Route, Routes} from "react-router-dom";
 import {YMInitializer} from 'react-yandex-metrika';
 
 import AppHeader from "components/AppHeader/AppHeader";
-import Game from "components/Game/Game";
+import StartGame from "components/Game/Game";
 import Profile from "components/Profile/Profile";
 
 import {game} from "./database/database";
@@ -49,7 +49,7 @@ function App() {
             <main>
                 <Routes>
                     <Route path={ROUTES.myBase} element={<MyBase/>}/>
-                    <Route path={ROUTES.main} element={<Game/>}/>
+                    <Route path={ROUTES.main} element={<StartGame/>}/>
                     <Route path={ROUTES.profile} element={<Profile/>}/>
                     <Route path={ROUTES.translate}
                            element={res().length > 4 ? <Translate words={res()}/> :

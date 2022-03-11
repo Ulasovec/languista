@@ -8,6 +8,10 @@ import {IWordDTO} from "models/WordDTO";
 import Typography from "@mui/material/Typography";
 import MyModal from "../MyModal/MyModal";
 import AppContext from "../../context/AppContext";
+import useGetData from "../../hooks/Fetch/GetData";
+
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 
 interface OptionsProps {
@@ -40,9 +44,26 @@ const Options = ({list, onClick, state}: OptionsProps) => {
     )
 }
 
+const StartGame = () => {
+    const guery = useGetData();
+    const dataQuery = guery.data?.data.map((item: { attributes: any, id :any })=> ({id:item.id , ...item.attributes}))
+    const data = dataQuery?.map((item: any) => ({id:item.id, eng:item.eng, rus:item.rus})  )
+    console.log(data);
+    return (
+        <>
+            {guery.isLoading
+                ? <Box sx={{display: 'flex'}}>
+                    <CircularProgress/>
+                </Box>
+                : <Game data={data}/>
+            }
+        </>
+    );
+}
 
-const Game = () => {
-        const [open, setOpen] = useState(false);
+const Game = ({data}: any) => {
+
+    const [open, setOpen] = useState(false);
         const {state} = useContext(AppContext)
         const handleOpen = () => setOpen(true);
         const handleClose = () => setOpen(false);
@@ -52,9 +73,10 @@ const Game = () => {
         const [voice, setVoice] = useState<SpeechSynthesisVoice | undefined>(undefined)
         const [newOne, setNewOne] = useState(0)
         const options: IWordDTO[] = useMemo(() => {
-            return _.shuffle(database).slice(0, 4)
+            return _.shuffle(data).slice(0, 4)
         }, [newOne])
         const [answer, setAnswer] = useState<number>(0)
+
 
         const checkAnswer = (e: any) => {
             e.preventDefault()
@@ -96,6 +118,7 @@ const Game = () => {
 
         }, [window.speechSynthesis, voice, state])
 
+        //if (!data) return null;
 
         let message = new SpeechSynthesisUtterance();
         message.lang = state ? 'en-US' : 'ru-RU';
@@ -116,7 +139,7 @@ const Game = () => {
                             speechSynthesis.speak(message)
                         }} size='large'>Speak</Button>
 
-                    <Options list={options} onClick={selectAnswer} state={state}/>
+                      <Options list={options} onClick={selectAnswer} state={state}/>
 
                     <Button sx={{width: '100%'}} onClick={checkAnswer} variant='contained' color='warning'
                             disabled={answer === 0} size='large'>
@@ -129,4 +152,4 @@ const Game = () => {
     }
 ;
 
-export default Game;
+export default StartGame;

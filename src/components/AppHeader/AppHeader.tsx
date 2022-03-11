@@ -11,14 +11,13 @@ import AppContext from "../../context/AppContext";
 
 import {database} from "../../database/database";
 import useGetData from "../../hooks/Fetch/GetData";
-import usePostData from "../../hooks/Fetch/PostData";
+
 
 const AppHeader = () => {
     const {setState} = useContext(AppContext)
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-    const postData = usePostData();
-     console.log(postData);
+
     const getData = useGetData();
     console.log(getData);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -33,7 +32,7 @@ const AppHeader = () => {
         setAnchorEl(null);
     };
     const handleData = () => {
-  postData.mutate({data:{eng:"you",rus:'ты'}})
+
     }
 
     return (
@@ -77,7 +76,7 @@ const AppHeader = () => {
                     >
                         <MenuItem onClick={handleEngRus}>Eng-Rus</MenuItem>
                         <MenuItem onClick={handleRusEng}>Rus-Eng</MenuItem>
-                        <MenuItem onClick={handleData}>Data</MenuItem>
+
                     </Menu>
                 </Toolbar>
             </Container>
