@@ -11,6 +11,7 @@ import AppContext from "../../context/AppContext";
 
 import {database} from "../../database/database";
 import useGetData from "../../hooks/Fetch/GetData";
+import LoginManager from "../LoginManager/LoginManager";
 
 
 const AppHeader = () => {
@@ -81,7 +82,8 @@ const AppHeader = () => {
                         </Menu>
                     </Box>
                     <Box sx={{ flexGrow: 0 }}>
-                        <Button color="inherit">Login</Button>
+                        {/*<Button color="inherit">Login</Button>*/}
+                        <LoginManager />
                     </Box>
                 </Toolbar>
             </Container>
