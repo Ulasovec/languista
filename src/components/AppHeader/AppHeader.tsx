@@ -6,12 +6,10 @@ import Container from '@mui/material/Container';
 import {Link} from "react-router-dom";
 import {ROUTES} from "routes";
 import Button from "@mui/material/Button";
-import {Menu, MenuItem} from "@mui/material";
+import {Box, Menu, MenuItem} from "@mui/material";
 import AppContext from "../../context/AppContext";
 
-import {database} from "../../database/database";
-import useGetData from "../../hooks/Fetch/Data/GetData";
-
+import LoginManager from "../LoginManager/LoginManager";
 
 const AppHeader = () => {
     const {setState} = useContext(AppContext)
@@ -39,45 +37,51 @@ const AppHeader = () => {
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <Link to={ROUTES.main}> <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{mr: 2, display: {xs: 'flex', md: 'flex'}}}
-                    >
-                        Languista
-                    </Typography></Link>
-                    <Link to={ROUTES.profile}> <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{mr: 2, display: {xs: 'flex', md: 'flex'}}}
-                    >
-                        Profile
-                    </Typography></Link>
-                    <Button
-                        id="basic-button"
-                        aria-controls={open ? 'basic-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}
-                        variant='contained'
-                    >
-                        Change
-                    </Button>
-                    <Menu
-                        id="basic-menu"
-                        anchorEl={anchorEl}
-                        open={open}
-                        // onClose={handleClose}
-                        MenuListProps={{
-                            'aria-labelledby': 'basic-button',
-                        }}
-                    >
-                        <MenuItem onClick={handleEngRus}>Eng-Rus</MenuItem>
-                        <MenuItem onClick={handleRusEng}>Rus-Eng</MenuItem>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'flex' } }}>
+                        <Link to={ROUTES.main}> <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{mr: 2, display: {xs: 'flex', md: 'flex'}}}
+                        >
+                            Languista
+                        </Typography></Link>
+                        <Link to={ROUTES.profile}> <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{mr: 2, display: {xs: 'flex', md: 'flex'}}}
+                        >
+                            Profile
+                        </Typography></Link>
+                        <Button
+                            id="basic-button"
+                            aria-controls={open ? 'basic-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={open ? 'true' : undefined}
+                            onClick={handleClick}
+                            variant='contained'
+                        >
+                            Change
+                        </Button>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            // onClose={handleClose}
+                            MenuListProps={{
+                                'aria-labelledby': 'basic-button',
+                            }}
+                        >
+                            <MenuItem onClick={handleEngRus}>Eng-Rus</MenuItem>
+                            <MenuItem onClick={handleRusEng}>Rus-Eng</MenuItem>
 
-                    </Menu>
+                        </Menu>
+                    </Box>
+                    <Box sx={{ flexGrow: 0 }}>
+                        {/*<Button color="inherit">Login</Button>*/}
+                        <LoginManager />
+                    </Box>
                 </Toolbar>
             </Container>
         </AppBar>
