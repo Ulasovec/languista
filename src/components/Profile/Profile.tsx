@@ -3,17 +3,22 @@ import {game} from "database/database";
 import MyBase from "../MyBase/MyBase";
 import Typography from "@mui/material/Typography";
 import UseGetDataGame from "../../hooks/Fetch/DataGame/GetDataGame";
+import {useQueryMe} from "../../hooks/Fetch/Users/useQueryMe";
+
+
+
 
 const Profile = () => {
 
     const gameData = UseGetDataGame();
     const correct = gameData.data?.data?.attributes.correct
     const wrong = gameData.data?.data?.attributes.wrong
-
-
+    const queryMe = useQueryMe()
+    console.log(queryMe)
+    const userName = queryMe?.data?.username
     return (
         <div>
-            <Typography align='center' variant="h2" gutterBottom>PROFILE</Typography>
+            <Typography align='center' variant="h2" gutterBottom>{(queryMe.isLoading)? 'загрузка...' : `Ваше имя ${userName}`}</Typography>
             <Typography variant="h5">
                 Количество правильных ответов:{(gameData.isLoading)? 'загрузка...' : `${correct}`}
             </Typography>

@@ -1,24 +1,60 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import LoginFormTS from './LoginFormTS';
+import RegisterFormTS from './RegisterFormTS';
+import useRegistration from "../../hooks/Fetch/Users/RegistrationUsers";
+import useAuthentication from "../../hooks/Fetch/Users/AuthenticationUsers";
+import {useQueryMe} from "../../hooks/Fetch/Users/useQueryMe";
+import AppContext from "../../context/AppContext";
+import {ROUTES} from "../../routes";
+import {Link} from "react-router-dom";
 
 const LoginManager = () => {
-    const [openModal, setOpenModal] = useState(false);
+    const {jwt, setJwt} = useContext(AppContext)
+    const [openModalAuth, setOpenModalAuth] = useState(false);
+    const [openModalReg, setOpenModalReg] = useState(false);
+    const queryMe = useQueryMe();
+    const usersRegistration = useRegistration();
+    const usersAuthentication = useAuthentication();
 
-    function handleOpen() {
-        setOpenModal(true);
+    // --- Authentication
+    function handleOpenAuth() {
+        setOpenModalAuth(true);
     }
 
-    function handleClose() {
-        setOpenModal(false);
+    function handleCloseAuth() {
+        setOpenModalAuth(false);
     }
 
-    function handleRequests(action: any) {
-        console.log('LOGIN action: ', action);
-        handleClose();
+    function handleRequestAuth(data: any) {
+        console.log('LOGIN action: ', data);
+        usersAuthentication.mutate(data)
+        handleCloseAuth();
+    }
+
+    // --- Registration
+
+    function handleOpenReg() {
+        setOpenModalReg(true);
+    }
+
+    function handleCloseReg() {
+        setOpenModalReg(false);
+    }
+
+    function handleRequestReg(data: any) {
+        console.log('Reg action: ', data);
+        usersRegistration.mutate(data)
+        handleCloseReg();
+    }
+
+    // ---
+
+    function handleLogout() {
+        setJwt(undefined);
     }
 
     const style = {
@@ -40,30 +76,39 @@ const LoginManager = () => {
     // @ts-ignore
     return (
         <div>
-            <Button color="inherit" onClick={handleOpen}>Login</Button>
-            <Modal
-                open={openModal}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
+            { jwt
+                ? <>
+                    <Link to={ROUTES.profile}> <Typography
+                        variant="h6"
+                        noWrap
+                        component="div"
+                        sx={{mr: 2, display: {xs: 'flex', md: 'flex'}}}
+                    >
+                        {queryMe?.data?.username}
+                    </Typography></Link>
+                    {/*<Button color="inherit" onClick={}>{queryMe?.data?.username}</Button>*/}
+                    <Button color="inherit" onClick={handleLogout}>Logout</Button>
+                </>
+                : <>
+                    <Button color="inherit" onClick={handleOpenAuth}>Login</Button>
+                    <Button color="inherit" onClick={handleOpenReg}>Reg</Button>
+                </>
+            }
+
+
+            <Modal open={openModalReg} onClose={handleCloseReg}>
                 <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Text in a modal
-                    </Typography>
-                    <Typography id="modal-modal-description" sx={{mt: 2}}>
-                        Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                    </Typography>
+                    <RegisterFormTS
+                        onRegister={(data: any) => handleRequestReg(data)}
+                    />
+                </Box>
+            </Modal>
+
+            <Modal open={openModalAuth} onClose={handleCloseAuth}>
+                <Box sx={style}>
                     <LoginFormTS
-                        noForgotPassword
-                        onLogin={(data: any) => handleRequests({type: 'login', payload: data})}
-                        isError={false}
-                        errorMessage={''}
-                        disabled={false}
-                        i18n={undefined}
-                        onForgotPassword={function (f: any): void {
-                            throw new Error('Function not implemented.');
-                        }}/>
+                        onLogin={(data: any) => handleRequestAuth(data)}
+                    />
                 </Box>
             </Modal>
         </div>

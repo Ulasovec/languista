@@ -19,25 +19,25 @@ import Button from "@mui/material/Button";
  * @constructor
  */
 
-interface LoginFormProps {
+interface RegisterFormProps {
     isError?: boolean,
     errorMessage?: string,
     disabled?: boolean,
-    onLogin: (f: any) => void,
+    onRegister: (f: any) => void,
     i18n?: any,
     noForgotPassword?: boolean,
     onForgotPassword?: (f: any) => void
 }
 
-const LoginFormTS = ({
+const RegisterFormTS = ({
                          isError = false,
                          errorMessage,
                          disabled = false,
-                         onLogin = f => console.log('onLogin: ', f),
+                         onRegister = f => console.log('onLogin: ', f),
                          i18n = {},
                          noForgotPassword = false,
                          onForgotPassword = f => console.log('onForgotPassword: ', f),
-                     }: LoginFormProps) => {
+                     }: RegisterFormProps) => {
     // Слияние i18n
     i18n = {...loginI18n, ...i18n};
     // Хук react-hook-form
@@ -46,7 +46,7 @@ const LoginFormTS = ({
     });
     const onSubmit = (data: any) => {
         console.log('Result: ', data);
-        onLogin(data);
+        onRegister(data);
     }
     //console.log('Identifier watch: ', watch('identifier')); // watch input value by passing the name of it
 
@@ -63,7 +63,7 @@ const LoginFormTS = ({
                 </div>
                 <Box>
                     {/* include validation with required or other standard HTML validation rules */}
-                    <TextField label={i18n.identifier.title} variant="outlined" {...register('identifier', {
+                    <TextField label={i18n.identifier.title} variant="outlined" {...register('username', {
                         required: i18n.identifier.required,
                         minLength: {
                             value: 2,
@@ -73,6 +73,8 @@ const LoginFormTS = ({
                     })} />
                     {/* errors will return when field validation fails  */}
                     {errors.identifier && <p>{errors.identifier.message}</p>}
+
+                    <TextField label="email" variant="outlined" {...register('email')} />
 
                     {/* include validation with required or other standard HTML validation rules */}
                     <TextField label={i18n.password.title} type="password" variant="outlined" {...register('password', {
@@ -91,7 +93,7 @@ const LoginFormTS = ({
                             {i18n.forgotPassword}
                         </a>}
 
-                    <input disabled={disabled || !isValid} type="submit" value={i18n.submit}/>
+                    <input disabled={disabled || !isValid} type="submit" value="Register"/>
                 </Box>
             </form>
         </div>
@@ -114,4 +116,4 @@ const LoginFormTS = ({
     onForgotPassword: f => console.log('onForgotPassword: ', f),
 };*/
 
-export default LoginFormTS;
+export default RegisterFormTS;

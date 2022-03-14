@@ -16,8 +16,6 @@ const AppHeader = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
-    const getData = useGetData();
-    console.log(getData);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -46,14 +44,14 @@ const AppHeader = () => {
                         >
                             Languista
                         </Typography></Link>
-                        <Link to={ROUTES.profile}> <Typography
-                            variant="h6"
-                            noWrap
-                            component="div"
-                            sx={{mr: 2, display: {xs: 'flex', md: 'flex'}}}
-                        >
-                            Profile
-                        </Typography></Link>
+                        {/*<Link to={ROUTES.profile}> <Typography*/}
+                        {/*    variant="h6"*/}
+                        {/*    noWrap*/}
+                        {/*    component="div"*/}
+                        {/*    sx={{mr: 2, display: {xs: 'flex', md: 'flex'}}}*/}
+                        {/*>*/}
+                        {/*    Profile*/}
+                        {/*</Typography></Link>*/}
                         <Button
                             id="basic-button"
                             aria-controls={open ? 'basic-menu' : undefined}
