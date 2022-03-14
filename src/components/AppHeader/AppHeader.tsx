@@ -10,7 +10,7 @@ import {Menu, MenuItem} from "@mui/material";
 import AppContext from "../../context/AppContext";
 
 import {database} from "../../database/database";
-import useGetData from "../../hooks/Fetch/GetData";
+import useGetData from "../../hooks/Fetch/Data/GetData";
 
 
 const AppHeader = () => {

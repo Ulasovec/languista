@@ -8,10 +8,13 @@ import {IWordDTO} from "models/WordDTO";
 import Typography from "@mui/material/Typography";
 import MyModal from "../MyModal/MyModal";
 import AppContext from "../../context/AppContext";
-import useGetData from "../../hooks/Fetch/GetData";
+import useGetData from "../../hooks/Fetch/Data/GetData";
 
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import UseGetDataGame from "../../hooks/Fetch/DataGame/GetDataGame";
+import usePostDataGame from "../../hooks/Fetch/DataGame/PutDataGame";
+import usePutDataGame from "../../hooks/Fetch/DataGame/PutDataGame";
 
 
 interface OptionsProps {
@@ -76,22 +79,27 @@ const Game = ({data}: any) => {
             return _.shuffle(data).slice(0, 4)
         }, [newOne])
         const [answer, setAnswer] = useState<number>(0)
-
-
+        const gameData = UseGetDataGame();
+        const putGameData = usePutDataGame();
+    //     console.log(gameData);
+    // if(!gameData.isLoading )
+    // {
+    //     const res = gameData.data.data.attributes
+    //     console.log(res)
+    //
+    //
+    // }
         const checkAnswer = (e: any) => {
             e.preventDefault()
             const isCorrect = answer === options[0].id
-            const storage = localStorage.getItem('game')
-            if (storage) {
-                const res = JSON.parse(storage)
-                const {correct, wrong} = res
+            if(!gameData.isLoading )
+            {
+                const res = gameData.data.data.attributes;
                 if (isCorrect) {
-                    res.correct = correct + 1
-                } else {
-                    res.wrong = wrong + 1
-                }
-
-                localStorage.setItem('game', JSON.stringify(res))
+                    res.correct += 1 }
+                else {
+                res.wrong += 1 }
+                putGameData.mutate({data:res});
             }
 
             const text = isCorrect ? 'Верно!' : `Неверно! Верно: ${options[0].rus}`
@@ -118,7 +126,7 @@ const Game = ({data}: any) => {
 
         }, [window.speechSynthesis, voice, state])
 
-        //if (!data) return null;
+
 
         let message = new SpeechSynthesisUtterance();
         message.lang = state ? 'en-US' : 'ru-RU';

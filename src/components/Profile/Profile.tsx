@@ -2,28 +2,24 @@ import React, {useEffect, useState} from 'react';
 import {game} from "database/database";
 import MyBase from "../MyBase/MyBase";
 import Typography from "@mui/material/Typography";
+import UseGetDataGame from "../../hooks/Fetch/DataGame/GetDataGame";
 
 const Profile = () => {
-    const [profile, setProfile] = useState(game)
-    useEffect(() => {
-        const storage = localStorage.getItem('game')
-        if (storage) {
-            setProfile(JSON.parse(storage))
-        }
 
-    }, [])
+    const gameData = UseGetDataGame();
+    const correct = gameData.data?.data?.attributes.correct
+    const wrong = gameData.data?.data?.attributes.wrong
 
-    const {correct, wrong} = profile
 
     return (
         <div>
             <Typography align='center' variant="h2" gutterBottom>PROFILE</Typography>
             <Typography variant="h5">
-                Количество правильных ответов: {correct}
+                Количество правильных ответов:{(gameData.isLoading)? 'загрузка...' : `${correct}`}
             </Typography>
             <br/>
             <Typography variant="h5">
-                Количество неправильных ответов: {wrong}
+                Количество неправильных ответов:{(gameData.isLoading)? 'загрузка...' : `${wrong}`}
             </Typography>
             <br/>
             <Typography variant="h6">
