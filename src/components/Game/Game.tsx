@@ -49,8 +49,8 @@ const Options = ({list, onClick, state}: OptionsProps) => {
 
 const StartGame = () => {
     const guery = useGetData();
-    const dataQuery = guery.data?.data.map((item: { attributes: any, id :any })=> ({id:item.id , ...item.attributes}))
-    const data = dataQuery?.map((item: any) => ({id:item.id, eng:item.eng, rus:item.rus})  )
+    const dataQuery = guery.data?.data.map((item: { attributes: any, id: any }) => ({id: item.id, ...item.attributes}))
+    const data = dataQuery?.map((item: any) => ({id: item.id, eng: item.eng, rus: item.rus}))
     console.log(data);
     return (
         <>
@@ -67,20 +67,20 @@ const StartGame = () => {
 const Game = ({data}: any) => {
 
     const [open, setOpen] = useState(false);
-        const {state} = useContext(AppContext)
-        const handleOpen = () => setOpen(true);
-        const handleClose = () => setOpen(false);
-        const [modal, setModal] = useState('')
+    const {state} = useContext(AppContext)
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [modal, setModal] = useState('')
 
-        const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
-        const [voice, setVoice] = useState<SpeechSynthesisVoice | undefined>(undefined)
-        const [newOne, setNewOne] = useState(0)
-        const options: IWordDTO[] = useMemo(() => {
-            return _.shuffle(data).slice(0, 4)
-        }, [newOne])
-        const [answer, setAnswer] = useState<number>(0)
-        const gameData = UseGetDataGame();
-        const putGameData = usePutDataGame();
+    const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
+    const [voice, setVoice] = useState<SpeechSynthesisVoice | undefined>(undefined)
+    const [newOne, setNewOne] = useState(0)
+    const options: IWordDTO[] = useMemo(() => {
+        return _.shuffle(data).slice(0, 4)
+    }, [newOne])
+    const [answer, setAnswer] = useState<number>(0)
+    const gameData = UseGetDataGame();
+    const putGameData = usePutDataGame();
     //     console.log(gameData);
     // if(!gameData.isLoading )
     // {
@@ -89,75 +89,73 @@ const Game = ({data}: any) => {
     //
     //
     // }
-        const checkAnswer = (e: any) => {
-            e.preventDefault()
-            const isCorrect = answer === options[0].id
-            if(!gameData.isLoading )
-            {
-                const res = gameData.data.data.attributes;
-                if (isCorrect) {
-                    res.correct += 1 }
-                else {
-                res.wrong += 1 }
-                putGameData.mutate({data:res});
+    const checkAnswer = (e: any) => {
+        e.preventDefault()
+        const isCorrect = answer === options[0].id
+        if (!gameData.isLoading) {
+            const res = gameData.data.data.attributes;
+            if (isCorrect) {
+                res.correct += 1
+            } else {
+                res.wrong += 1
             }
-
-            const text = isCorrect ? 'Верно!' : `Неверно! Верно: ${options[0].rus}`
-            setModal(text)
-            handleOpen()
-
-
-            setNewOne(prevState => prevState + 1)
-            setAnswer(0)
+            putGameData.mutate({data: res});
         }
 
-        const selectAnswer = useCallback((id: number) => {
-            setAnswer(id)
-        }, [answer])
-
-        useEffect(() => {
-            const voicesArr = window.speechSynthesis.getVoices()
-            console.log(voicesArr)
-            if (voicesArr.length > 0) {
-                const res = state ? voicesArr.find(x => x.lang === 'en-US' || x.lang === 'en-GB') : voicesArr.find(x => x.lang === 'ru-RU')
-                setVoices(voicesArr)
-                setVoice(res)
-            }
-
-        }, [window.speechSynthesis, voice, state])
+        const text = isCorrect ? 'Верно!' : `Неверно! Верно: ${options[0].rus}`
+        setModal(text)
+        handleOpen()
 
 
-
-        let message = new SpeechSynthesisUtterance();
-        message.lang = state ? 'en-US' : 'ru-RU';
-        message.text = state ? options[0].eng : options[0].rus;
-        if (voice) {
-            message.voice = voice
-        }
-
-        return (
-            <>
-                <div className='game'>
-                    <Typography align='center' variant="h2"
-                                gutterBottom>{state ? options[0].eng : options[0].rus}</Typography>
-                    <Button
-                        sx={{width: '100%'}}
-                        endIcon={<PlayCircleOutlineIcon/>} variant='contained' color='success'
-                        onClick={() => {
-                            speechSynthesis.speak(message)
-                        }} size='large'>Speak</Button>
-
-                      <Options list={options} onClick={selectAnswer} state={state}/>
-
-                    <Button sx={{width: '100%'}} onClick={checkAnswer} variant='contained' color='warning'
-                            disabled={answer === 0} size='large'>
-                        Проверить
-                    </Button>
-                </div>
-                <MyModal open={open} handleClose={handleClose} text={modal}/>
-            </>
-        );
+        setNewOne(prevState => prevState + 1)
+        setAnswer(0)
     }
-;
+
+    const selectAnswer = useCallback((id: number) => {
+        setAnswer(id)
+    }, [answer])
+
+    useEffect(() => {
+        const voicesArr = window.speechSynthesis.getVoices()
+        console.log(voicesArr)
+        if (voicesArr.length > 0) {
+            const res = state ? voicesArr.find(x => x.lang === 'en-US' || x.lang === 'en-GB') : voicesArr.find(x => x.lang === 'ru-RU')
+            setVoices(voicesArr)
+            setVoice(res)
+        }
+
+    }, [window.speechSynthesis, voice, state])
+
+
+    let message = new SpeechSynthesisUtterance();
+    message.lang = state ? 'en-US' : 'ru-RU';
+    message.text = state ? options[0].eng : options[0].rus;
+    if (voice) {
+        message.voice = voice
+    }
+
+    return (
+        <>
+            <div className='game'>
+                <Typography align='center' variant="h2"
+                            gutterBottom>{state ? options[0].eng : options[0].rus}</Typography>
+                <Button
+                    sx={{width: '100%'}}
+                    endIcon={<PlayCircleOutlineIcon/>} variant='contained' color='success'
+                    onClick={() => {
+                        speechSynthesis.speak(message)
+                    }} size='large'>Speak</Button>
+
+                <Options list={options} onClick={selectAnswer} state={state}/>
+
+                <Button sx={{width: '100%'}} onClick={checkAnswer} variant='contained' color='warning'
+                        disabled={answer === 0} size='large'>
+                    Проверить
+                </Button>
+            </div>
+            <MyModal open={open} handleClose={handleClose} text={modal}/>
+        </>
+    );
+}
 
 export default StartGame;
