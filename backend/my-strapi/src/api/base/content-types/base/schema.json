@@ -17,6 +17,18 @@
     },
     "wrong": {
       "type": "integer"
+    },
+    "author": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "bases"
+    },
+    "date": {
+      "type": "date"
+    },
+    "level": {
+      "type": "integer"
     }
   }
 }

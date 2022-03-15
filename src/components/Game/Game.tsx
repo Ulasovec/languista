@@ -12,9 +12,10 @@ import useGetData from "../../hooks/Fetch/Data/GetData";
 
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import UseGetDataGame from "../../hooks/Fetch/DataGame/GetDataGame";
-import usePostDataGame from "../../hooks/Fetch/DataGame/PutDataGame";
+//import UseGetDataGame from "../../hooks/Fetch/DataGame/GetDataGame";
 import usePutDataGame from "../../hooks/Fetch/DataGame/PutDataGame";
+import usePostDataGame from "../../hooks/Fetch/DataGame/PostDataGame";
+import {useQueryGame} from "../../hooks/Fetch/DataGame/useQueryGame";
 
 
 interface OptionsProps {
@@ -48,23 +49,25 @@ const Options = ({list, onClick, state}: OptionsProps) => {
 }
 
 const StartGame = () => {
-    const guery = useGetData();
-    const dataQuery = guery.data?.data.map((item: { attributes: any, id: any }) => ({id: item.id, ...item.attributes}))
+    const queryData = useGetData();
+    const queryGame = useQueryGame();
+
+    const dataQuery = queryData.data?.data.map((item: { attributes: any, id: any }) => ({id: item.id, ...item.attributes}))
     const data = dataQuery?.map((item: any) => ({id: item.id, eng: item.eng, rus: item.rus}))
-    console.log(data);
+
     return (
         <>
-            {guery.isLoading
+            {queryData.isLoading || queryGame.isLoading
                 ? <Box sx={{display: 'flex'}}>
                     <CircularProgress/>
                 </Box>
-                : <Game data={data}/>
+                : <Game data={data} game={queryGame.data}/>
             }
         </>
     );
 }
 
-const Game = ({data}: any) => {
+const Game = ({data, game}: any) => {
 
     const [open, setOpen] = useState(false);
     const {state} = useContext(AppContext)
@@ -79,8 +82,12 @@ const Game = ({data}: any) => {
         return _.shuffle(data).slice(0, 4)
     }, [newOne])
     const [answer, setAnswer] = useState<number>(0)
-    const gameData = UseGetDataGame();
+
+    // queryGame
+    //const gameData = UseGetDataGame();
     const putGameData = usePutDataGame();
+    const postGameData = usePostDataGame();
+
     //     console.log(gameData);
     // if(!gameData.isLoading )
     // {
@@ -92,14 +99,18 @@ const Game = ({data}: any) => {
     const checkAnswer = (e: any) => {
         e.preventDefault()
         const isCorrect = answer === options[0].id
-        if (!gameData.isLoading) {
-            const res = gameData.data.data.attributes;
+        console.log('ID: ', game);
+        if (game?.data[0]?.id !== undefined) {
+            const res = game.data[0].attributes;
             if (isCorrect) {
                 res.correct += 1
             } else {
                 res.wrong += 1
             }
-            putGameData.mutate({data: res});
+            putGameData.mutate({id: game.data[0].id, data: res});
+        } else {
+            const res = isCorrect ? {correct: 1, wrong: 0} : {correct: 0, wrong: 1};
+            postGameData.mutate({data: res});
         }
 
         const text = isCorrect ? 'Верно!' : `Неверно! Верно: ${options[0].rus}`

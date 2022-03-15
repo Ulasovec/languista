@@ -4,15 +4,17 @@ import MyBase from "../MyBase/MyBase";
 import Typography from "@mui/material/Typography";
 import UseGetDataGame from "../../hooks/Fetch/DataGame/GetDataGame";
 import {useQueryMe} from "../../hooks/Fetch/Users/useQueryMe";
+import {useQueryGame} from "../../hooks/Fetch/DataGame/useQueryGame";
 
 
 
 
 const Profile = () => {
 
-    const gameData = UseGetDataGame();
-    const correct = gameData.data?.data?.attributes.correct
-    const wrong = gameData.data?.data?.attributes.wrong
+    //const gameData = UseGetDataGame();
+    const gameData = useQueryGame();
+    const correct = gameData.data?.data[0]?.attributes.correct
+    const wrong = gameData.data?.data[0]?.attributes.wrong
     const queryMe = useQueryMe()
     console.log(queryMe)
     const userName = queryMe?.data?.username

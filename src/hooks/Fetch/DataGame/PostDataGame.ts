@@ -3,7 +3,7 @@ import axios from "axios";
 import {useContext} from "react";
 import AppContext from "../../../context/AppContext";
 
-export default function usePutDataGame() {
+export default function usePostDataGame() {
     const queryClient = useQueryClient();
     const {jwt} = useContext(AppContext);
 
@@ -13,11 +13,16 @@ export default function usePutDataGame() {
         },
     });
     async function postData(newData:any){
-        return axios.put<any>(`http://localhost:1337/api/bases/${newData.id}`,newData, {
+        return axios.post<any>(`http://localhost:1337/api/bases`,newData, {
             headers: {
                 Authorization: `Bearer ${jwt}`,
             },
         });
     }
-    return  mutationCreate;
+     return  mutationCreate;
 }
+
+
+
+
+
