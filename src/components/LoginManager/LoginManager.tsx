@@ -77,7 +77,7 @@ const LoginManager = () => {
     return (
         <div>
             { jwt
-                ? <>
+                ? <Box sx={{ display: { xs: 'flex' } }}>
                     <Link to={ROUTES.profile}> <Typography
                         variant="h6"
                         noWrap
@@ -88,7 +88,7 @@ const LoginManager = () => {
                     </Typography></Link>
                     {/*<Button color="inherit" onClick={}>{queryMe?.data?.username}</Button>*/}
                     <Button color="inherit" onClick={handleLogout}>Logout</Button>
-                </>
+                </Box>
                 : <>
                     <Button color="inherit" onClick={handleOpenAuth}>Login</Button>
                     <Button color="inherit" onClick={handleOpenReg}>Reg</Button>

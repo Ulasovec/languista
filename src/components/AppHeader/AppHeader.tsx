@@ -28,8 +28,11 @@ const AppHeader = () => {
         setAnchorEl(null);
     };
     const handleData = () => {
-
     }
+    const handleClose = () => {
+        setAnchorEl(null);
+    }
+
 
     return (
         <AppBar position="static">
@@ -52,6 +55,14 @@ const AppHeader = () => {
                         {/*>*/}
                         {/*    Profile*/}
                         {/*</Typography></Link>*/}
+                        <Link to={ROUTES.myBase}> <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{mr: 2, display: {xs: 'flex', md: 'flex'}}}
+                        >
+                            Words
+                        </Typography></Link>
                         <Button
                             id="basic-button"
                             aria-controls={open ? 'basic-menu' : undefined}
@@ -66,7 +77,7 @@ const AppHeader = () => {
                             id="basic-menu"
                             anchorEl={anchorEl}
                             open={open}
-                            // onClose={handleClose}
+                            onClose={handleClose}
                             MenuListProps={{
                                 'aria-labelledby': 'basic-button',
                             }}
@@ -76,7 +87,7 @@ const AppHeader = () => {
 
                         </Menu>
                     </Box>
-                    <Box sx={{ flexGrow: 0 }}>
+                    <Box sx={{ flexGrow: 0, display: { xs: 'flex' }  }}>
                         {/*<Button color="inherit">Login</Button>*/}
                         <LoginManager />
                     </Box>
